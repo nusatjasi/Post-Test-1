@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Test - Beranda</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="index.html" class="logo">Post-Test</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="soal_tes.html">Soal Tes</a></li>
+                    <li><a href="jawaban.html">Jawaban</a></li>
+                    <li><a href="history.html">Riwayat</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container content">
+        <section class="scrolling-text-section">
+            <div class="scrolling-text-container">
+                <p class="scrolling-text">Selamat datang di halaman Post-Test! Ikuti tes Anda dan raih nilai terbaik!</p>
+            </div>
+        </section>
+
+        <section class="champions-section">
+            <h2>Daftar Juara Tertinggi</h2>
+            <div class="champion-cards">
+                <div class="card champion-gold">
+                    <h3><span class="crown">👑</span> Juara 1</h3>
+                    <p id="winner1-name">Belum ada juara</p>
+                    <p class="detail-info" id="winner1-correct">Soal Benar: -</p>
+                    <p class="detail-info" id="winner1-wrong">Soal Salah: -</p>
+                    <p class="score" id="winner1-score">Total Nilai: -</p>
+                </div>
+                <div class="card champion-silver">
+                    <h3><span class="crown">🥈</span> Juara 2</h3>
+                    <p id="winner2-name">Belum ada juara</p>
+                    <p class="detail-info" id="winner2-correct">Soal Benar: -</p>
+                    <p class="detail-info" id="winner2-wrong">Soal Salah: -</p>
+                    <p class="score" id="winner2-score">Total Nilai: -</p>
+                </div>
+                <div class="card champion-bronze">
+                    <h3><span class="crown">🥉</span> Juara 3</h3>
+                    <p id="winner3-name">Belum ada juara</p>
+                    <p class="detail-info" id="winner3-correct">Soal Benar: -</p>
+                    <p class="detail-info" id="winner3-wrong">Soal Salah: -</p>
+                    <p class="score" id="winner3-score">Total Nilai: -</p>
+                </div>
+            </div>
+        </section>
+
+        ---
+
+        <section class="lowest-scores-section">
+            <h2>Daftar Skor Terendah</h2>
+            <div class="champion-cards">
+                <div class="card lowest-1">
+                    <h3>Skor Terendah #1</h3>
+                    <p id="lowest1-name">Belum ada data</p>
+                    <p class="detail-info" id="lowest1-correct">Soal Benar: -</p>
+                    <p class="detail-info" id="lowest1-wrong">Soal Salah: -</p>
+                    <p class="score" id="lowest1-score">Total Nilai: -</p>
+                </div>
+                <div class="card lowest-2">
+                    <h3>Skor Terendah #2</h3>
+                    <p id="lowest2-name">Belum ada data</p>
+                    <p class="detail-info" id="lowest2-correct">Soal Benar: -</p>
+                    <p class="detail-info" id="lowest2-wrong">Soal Salah: -</p>
+                    <p class="score" id="lowest2-score">Total Nilai: -</p>
+                </div>
+                <div class="card lowest-3">
+                    <h3>Skor Terendah #3</h3>
+                    <p id="lowest3-name">Belum ada data</p>
+                    <p class="detail-info" id="lowest3-correct">Soal Benar: -</p>
+                    <p class="detail-info" id="lowest3-wrong">Soal Salah: -</p>
+                    <p class="score" id="lowest3-score">Total Nilai: -</p>
+                </div>
+            </div>
+        </section>
+
+        ---
+
+        <section class="school-results-section">
+            <h2>Hasil Post-Test Semua Peserta</h2>
+            <div class="table-responsive">
+                <table id="results-table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Nama Sekolah</th>
+                            <th>NPSN</th>
+                            <th>Nama Peserta</th>
+                            <th>Soal Benar</th>
+                            <th>Soal Salah</th>
+                            <th>Total Nilai</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Post-Test Website. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const resultsTableBody = document.querySelector('#results-table tbody');
+            
+            // Elemen untuk Juara Tertinggi
+            const winner1Name = document.getElementById('winner1-name');
+            const winner1Score = document.getElementById('winner1-score');
+            const winner1Correct = document.getElementById('winner1-correct');
+            const winner1Wrong = document.getElementById('winner1-wrong');
+
+            const winner2Name = document.getElementById('winner2-name');
+            const winner2Score = document.getElementById('winner2-score');
+            const winner2Correct = document.getElementById('winner2-correct');
+            const winner2Wrong = document.getElementById('winner2-wrong');
+
+            const winner3Name = document.getElementById('winner3-name');
+            const winner3Score = document.getElementById('winner3-score');
+            const winner3Correct = document.getElementById('winner3-correct');
+            const winner3Wrong = document.getElementById('winner3-wrong');
+
+            // Elemen untuk Skor Terendah
+            const lowest1Name = document.getElementById('lowest1-name');
+            const lowest1Score = document.getElementById('lowest1-score');
+            const lowest1Correct = document.getElementById('lowest1-correct');
+            const lowest1Wrong = document.getElementById('lowest1-wrong');
+
+            const lowest2Name = document.getElementById('lowest2-name');
+            const lowest2Score = document.getElementById('lowest2-score');
+            const lowest2Correct = document.getElementById('lowest2-correct');
+            const lowest2Wrong = document.getElementById('lowest2-wrong');
+
+            const lowest3Name = document.getElementById('lowest3-name');
+            const lowest3Score = document.getElementById('lowest3-score');
+            const lowest3Correct = document.getElementById('lowest3-correct');
+            const lowest3Wrong = document.getElementById('lowest3-wrong');
+
+
+            let results = [];
+
+            // Ambil data hasil dari LocalStorage
+            const storedResults = localStorage.getItem('postTestResults');
+            if (storedResults) {
+                results = JSON.parse(storedResults);
+            }
+
+            // Menggunakan Map untuk menghindari duplikat berdasarkan NPSN
+            // dan hanya menyimpan hasil dengan nilai tertinggi untuk NPSN tersebut
+            const uniqueResultsMap = new Map();
+            results.forEach(res => {
+                const npsn = res.npsn;
+                if (!uniqueResultsMap.has(npsn) || uniqueResultsMap.get(npsn).score < res.score) {
+                    uniqueResultsMap.set(npsn, res);
+                }
+            });
+
+            // Konversi Map kembali ke array untuk diurutkan
+            const finalResults = Array.from(uniqueResultsMap.values());
+
+            // Urutkan untuk Juara (nilai tertinggi ke terendah)
+            const sortedHighestResults = [...finalResults].sort((a, b) => b.score - a.score);
+
+            // Fungsi untuk memperbarui tampilan kartu
+            function updateCard(nameElement, scoreElement, correctElement, wrongElement, data, defaultName, defaultScore, defaultCorrect, defaultWrong) {
+                if (data) {
+                    nameElement.textContent = data.participantName + ' (' + data.schoolName + ')';
+                    correctElement.textContent = 'Benar: ' + data.correctAnswersCount;
+                    wrongElement.textContent = 'Salah: ' + data.wrongAnswersCount;
+                    scoreElement.textContent = 'Total Nilai: ' + data.score;
+                } else {
+                    nameElement.textContent = defaultName;
+                    correctElement.textContent = defaultCorrect;
+                    wrongElement.textContent = defaultWrong;
+                    scoreElement.textContent = defaultScore;
+                }
+            }
+
+            // Tampilkan juara 1, 2, dan 3
+            updateCard(winner1Name, winner1Score, winner1Correct, winner1Wrong, sortedHighestResults[0], "Belum ada juara", "Nilai: -", "Benar: -", "Salah: -");
+            updateCard(winner2Name, winner2Score, winner2Correct, winner2Wrong, sortedHighestResults[1], "Belum ada juara", "Nilai: -", "Benar: -", "Salah: -");
+            updateCard(winner3Name, winner3Score, winner3Correct, winner3Wrong, sortedHighestResults[2], "Belum ada juara", "Nilai: -", "Benar: -", "Salah: -");
+
+            // Urutkan untuk Skor Terendah (nilai terendah ke tertinggi)
+            const sortedLowestResults = [...finalResults].sort((a, b) => a.score - b.score);
+
+            // Tampilkan skor terendah 1, 2, dan 3
+            updateCard(lowest1Name, lowest1Score, lowest1Correct, lowest1Wrong, sortedLowestResults[0], "Belum ada data", "Nilai: -", "Benar: -", "Salah: -");
+            updateCard(lowest2Name, lowest2Score, lowest2Correct, lowest2Wrong, sortedLowestResults[1], "Belum ada data", "Nilai: -", "Benar: -", "Salah: -");
+            updateCard(lowest3Name, lowest3Score, lowest3Correct, lowest3Wrong, sortedLowestResults[2], "Belum ada data", "Nilai: -", "Benar: -", "Salah: -");
+
+
+            // Tampilkan semua data ke tabel (tetap diurutkan dari tertinggi ke terendah untuk konsistensi)
+            resultsTableBody.innerHTML = ''; // Kosongkan tabel sebelum mengisi
+            if (sortedHighestResults.length > 0) {
+                sortedHighestResults.forEach((data, index) => {
+                    const row = resultsTableBody.insertRow();
+                    const cellNo = row.insertCell(0);
+                    const cellSekolah = row.insertCell(1);
+                    const cellNPSN = row.insertCell(2);
+                    const cellPeserta = row.insertCell(3);
+                    const cellCorrect = row.insertCell(4); // Kolom benar
+                    const cellWrong = row.insertCell(5);   // Kolom salah
+                    const cellNilai = row.insertCell(6);   // Kolom total nilai
+
+                    cellNo.textContent = index + 1;
+                    cellSekolah.textContent = data.schoolName;
+                    cellNPSN.textContent = data.npsn;
+                    cellPeserta.textContent = data.participantName;
+                    cellCorrect.textContent = data.correctAnswersCount;
+                    cellWrong.textContent = data.wrongAnswersCount;
+                    cellNilai.textContent = data.score;
+                });
+            } else {
+                const row = resultsTableBody.insertRow();
+                const cell = row.insertCell(0);
+                cell.colSpan = 7; // Ubah colspan menjadi 7 (No, Sekolah, NPSN, Peserta, Benar, Salah, Total Nilai)
+                cell.textContent = "Belum ada data hasil post-test.";
+                cell.style.textAlign = "center";
+                cell.style.padding = "20px";
+                cell.style.color = "#888";
+            }
+        });
+    </script>
+</body>
+</html>

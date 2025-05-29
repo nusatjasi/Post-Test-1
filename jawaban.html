@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Test - Jawaban</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Gaya tambahan untuk halaman jawaban */
+        .answers-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .answer-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #eee;
+        }
+        .answer-item:last-child {
+            border-bottom: none;
+        }
+        .answer-item p {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .answer-item .correct-answer {
+            color: #28a745; /* Green for correct answer */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="passwordOverlay" class="password-overlay">
+        <div class="password-modal">
+            <h3>Masukkan Password untuk Melihat Jawaban</h3>
+            <input type="password" id="passwordInput" placeholder="Password">
+            <button id="submitPassword">Masuk</button>
+            <p class="message" id="passwordMessage"></p>
+        </div>
+        <div id="successAnimation" class="checkmark-circle" style="display:none;">
+            <div class="checkmark"></div>
+        </div>
+    </div>
+
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="index.html" class="logo">Post-Test</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="soal_tes.html">Soal Tes</a></li>
+                    <li><a href="jawaban.html">Jawaban</a></li>
+                    <li><a href="history.html">Riwayat</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container content">
+        <section class="answers-section">
+            <h2>Kunci Jawaban Post-Test Sosialisasi Permendikbudristek No. 58 Tahun 2024</h2>
+            <div class="answer-item">
+                <p>1. Salah satu tujuan dari regulasi terbaru Permendikbudristek No. 58 Tahun 2024 adalah...</p>
+                <span class="correct-answer">Jawaban Benar: B. Memperkuat sistem legalitas ijazah secara nasional</span>
+            </div>
+            <div class="answer-item">
+                <p>2. Apa ciri utama dari format ijazah yang digunakan pada tahun pelajaran 2024/2025?</p>
+                <span class="correct-answer">Jawaban Benar: C. Ditandatangani secara elektronik oleh kepala sekolah</span>
+            </div>
+            <div class="answer-item">
+                <p>3. Mengapa nomor ijazah nasional menjadi elemen penting dalam dokumen ijazah?</p>
+                <span class="correct-answer">Jawaban Benar: C. Untuk menghindari pemalsuan dan mendukung verifikasi digital</span>
+            </div>
+            <div class="answer-item">
+                <p>4. Siapakah pihak yang harus bertanggung jawab terhadap keakuratan data kelulusan dan isi ijazah siswa?</p>
+                <span class="correct-answer">Jawaban Benar: C. Kepala sekolah</span>
+            </div>
+            <div class="answer-item">
+                <p>5. Kapan sebaiknya pengisian SPTJM dilakukan oleh sekolah?</p>
+                <span class="correct-answer">Jawaban Benar: C. Setelah rapor diserahkan dan kelulusan diumumkan</span>
+            </div>
+            <div class="answer-item">
+                <p>6. Apa risiko jika SPTJM tidak diisi atau tidak dilaporkan tepat waktu oleh sekolah?</p>
+                <span class="correct-answer">Jawaban Benar: C. Ijazah tidak dapat diterbitkan secara resmi</span>
+            </div>
+            <div class="answer-item">
+                <p>7. Salah satu keunggulan dari penggunaan tanda tangan elektronik dalam ijazah adalah…</p>
+                <span class="correct-answer">Jawaban Benar: C. Memberikan kemudahan validasi dan keamanan data</span>
+            </div>
+            <div class="answer-item">
+                <p>8. Dalam rangka penyeragaman teknis, hal apa yang harus disepakati antar sekolah di bawah dinas pendidikan?</p>
+                <span class="correct-answer">Jawaban Benar: C. Jadwal penerbitan dan distribusi ijazah</span>
+            </div>
+            <div class="answer-item">
+                <p>9. Apa peran utama operator sekolah dalam proses penerbitan ijazah sesuai kebijakan baru ini?</p>
+                <span class="correct-answer">Jawaban Benar: B. Menginput dan memverifikasi data peserta didik</span>
+            </div>
+            <div class="answer-item">
+                <p>10. Untuk memastikan keterlambatan tidak terjadi, apa strategi terbaik yang dapat dilakukan sekolah?</p>
+                <span class="correct-answer">Jawaban Benar: C. Membuat timeline kerja dan membentuk tim kelulusan</span>
+            </div>
+            <div class="answer-item">
+                <p>11. Dalam penerbitan ijazah tahun 2024/2025, siapa yang berwenang memberikan legalisasi melalui tanda tangan digital?</p>
+                <span class="correct-answer">Jawaban Benar: C. Kepala sekolah</span>
+            </div>
+            <p style="margin-top: 30px; font-style: italic;">
+                *Catatan: Halaman ini hanya menampilkan kunci jawaban. Hasil tes Anda dapat dilihat di halaman Beranda.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Post-Test Website. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password untuk akses halaman jawaban
+            const correctPassword = 'Kasie123.!'; 
+            const passwordOverlay = document.getElementById('passwordOverlay');
+            const passwordInput = document.getElementById('passwordInput');
+            const submitPasswordBtn = document.getElementById('submitPassword');
+            const passwordMessage = document.getElementById('passwordMessage');
+            const successAnimation = document.getElementById('successAnimation');
+            const mainContent = document.querySelector('main.container.content');
+
+            // Sembunyikan konten utama sampai password benar
+            mainContent.style.display = 'none';
+            passwordOverlay.style.display = 'flex'; // Tampilkan overlay password
+
+            submitPasswordBtn.addEventListener('click', function() {
+                if (passwordInput.value === correctPassword) {
+                    passwordMessage.textContent = '';
+                    
+                    // Tampilkan animasi sukses
+                    successAnimation.style.display = 'flex';
+                    setTimeout(() => {
+                        passwordOverlay.style.display = 'none'; // Sembunyikan overlay
+                        mainContent.style.display = 'block'; // Tampilkan konten utama
+                        successAnimation.style.display = 'none'; // Sembunyikan animasi
+                    }, 800); // Durasi animasi + sedikit jeda
+                    
+                } else {
+                    passwordMessage.textContent = 'Password salah. Coba lagi.';
+                    passwordInput.value = ''; // Kosongkan input password
+                }
+            });
+
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitPasswordBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

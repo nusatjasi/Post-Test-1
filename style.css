@@ -1,0 +1,347 @@
+/* General Styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6; /* Light gray background */
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Navigation Bar */
+.navbar {
+    background-color: #2c3e50; /* Dark blue */
+    color: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar .logo {
+    color: white;
+    font-size: 1.8em;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.navbar .nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar .nav-links li {
+    margin-left: 25px;
+}
+
+.navbar .nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-links a:hover {
+    color: #3498db; /* Lighter blue on hover */
+}
+
+/* Content Area */
+main.container.content {
+    padding: 40px 0;
+}
+
+/* Scrolling Text */
+.scrolling-text-section {
+    background-color: #ecf0f1; /* Light gray */
+    padding: 15px 0;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    overflow: hidden; /* Important for horizontal scroll */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.scrolling-text-container {
+    white-space: nowrap; /* Keep text on single line */
+    animation: scrollText 25s linear infinite; /* Adjust duration for slower/faster */
+}
+
+.scrolling-text {
+    display: inline-block; /* Essential for animation */
+    padding-left: 100%; /* Start off-screen */
+    font-size: 1.2em;
+    color: #2c3e50;
+    margin: 0;
+}
+
+@keyframes scrollText {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* Champion Cards & Lowest Scores Cards */
+.champions-section h2, .lowest-scores-section h2, .school-results-section h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+.champion-cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* Space between cards */
+    flex-wrap: wrap; /* Allow cards to wrap on smaller screens */
+    margin-bottom: 50px;
+}
+
+.card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 30px;
+    text-align: center;
+    width: 280px; /* Fixed width for cards */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.card h3 {
+    margin-top: 0;
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+/* Gaya baru untuk info detail di card (benar/salah) */
+.card .detail-info {
+    font-size: 0.95em;
+    color: #666;
+    margin-bottom: 2px; /* Lebih kecil daripada p biasa */
+}
+
+
+.card .score {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #3498db;
+    margin-top: 10px; /* Jarak lebih besar dari detail info */
+}
+
+.champion-gold {
+    border-top: 5px solid #FFD700; /* Gold */
+}
+.champion-silver {
+    border-top: 5px solid #C0C0C0; /* Silver */
+}
+.champion-bronze {
+    border-top: 5px solid #CD7F32; /* Bronze */
+}
+
+.lowest-scores-section h2 {
+    margin-top: 50px; /* Tambahkan sedikit jarak dari bagian atas */
+}
+
+.card.lowest-1 {
+    border-top: 5px solid #e74c3c; /* Merah untuk terendah 1 */
+}
+.card.lowest-2 {
+    border-top: 5px solid #f39c12; /* Oranye/Kuning untuk terendah 2 */
+}
+.card.lowest-3 {
+    border-top: 5px solid #f1c40f; /* Kuning lebih terang untuk terendah 3 */
+}
+
+
+/* School Results Table */
+.school-results-section h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+.table-responsive {
+    overflow-x: auto; /* Make table scrollable on small screens */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden; /* Ensures rounded corners apply to content */
+}
+
+table th, table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #34495e; /* Darker blue for header */
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light gray for even rows */
+}
+
+table tbody tr:hover {
+    background-color: #e0f2f7; /* Light blue on row hover */
+}
+
+/* Footer */
+footer {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 0.9em;
+    margin-top: 50px;
+}
+
+/* Crown Icons */
+.crown {
+    margin-right: 5px;
+    font-size: 1.2em; /* Adjust size as needed */
+}
+
+/* --- PASSWORD OVERLAY AND ANIMATION STYLES (GLOBAL) --- */
+.password-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+}
+
+.password-modal {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    transform: translateY(-50px);
+    opacity: 0;
+    animation: fadeInModal 0.3s forwards;
+    position: relative; /* Penting untuk animasi centang */
+}
+
+@keyframes fadeInModal {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.password-modal h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.password-modal input[type="password"] {
+    width: calc(100% - 24px); /* Account for padding and border */
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+.password-modal button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.password-modal button:hover {
+    background-color: #2980b9;
+}
+
+.password-modal .message {
+    margin-top: 15px;
+    color: #e74c3c; /* Red for error */
+    font-weight: bold;
+}
+
+/* --- SUCCESS ANIMATION --- */
+.checkmark-circle {
+    width: 80px;
+    height: 80px;
+    position: fixed; /* Posisi tetap di tengah layar */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background-color: #28a745;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: scaleIn 0.3s forwards;
+    z-index: 1001; /* Di atas overlay */
+}
+
+.checkmark {
+    width: 40px;
+    height: 20px;
+    border-left: 5px solid white;
+    border-bottom: 5px solid white;
+    transform: rotate(-45deg);
+    opacity: 0;
+    animation: drawCheck 0.3s 0.2s forwards;
+}
+
+@keyframes scaleIn {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+@keyframes drawCheck {
+    0% { height: 0; opacity: 0; }
+    100% { height: 20px; opacity: 1; }
+}
+
+/* Hidden state for overlay */
+.password-overlay.hidden {
+    display: none;
+}

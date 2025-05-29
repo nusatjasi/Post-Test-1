@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Test - Riwayat</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Gaya tambahan untuk halaman riwayat */
+        .history-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .history-table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .history-table th, .history-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .history-table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        .history-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .history-table tbody tr:hover {
+            background-color: #e0f2f7;
+        }
+        .view-button {
+            background-color: #28a745;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .view-button:hover {
+            background-color: #218838;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 700px;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-body .question-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #eee;
+        }
+        .modal-body .question-item:last-child {
+            border-bottom: none;
+        }
+        .modal-body .question-item p {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .modal-body .user-answer {
+            color: #007bff; /* Blue for user answer */
+            font-weight: normal;
+        }
+        .modal-body .correct-answer-text { /* Ubah nama kelas agar tidak konflik dengan .correct-answer di index */
+            color: #28a745; /* Green for correct answer */
+            font-weight: normal;
+            margin-left: 15px;
+        }
+        .modal-body .incorrect-answer {
+            color: #dc3545; /* Red for incorrect answer */
+            font-weight: normal;
+        }
+
+        /* Reset Button Styling */
+        .reset-section {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+        .reset-button {
+            background-color: #e74c3c;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .reset-button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div id="passwordOverlay" class="password-overlay">
+        <div class="password-modal">
+            <h3>Masukkan Password untuk Melihat Riwayat</h3>
+            <input type="password" id="passwordInput" placeholder="Password">
+            <button id="submitPassword">Masuk</button>
+            <p class="message" id="passwordMessage"></p>
+        </div>
+        <div id="successAnimation" class="checkmark-circle" style="display:none;">
+            <div class="checkmark"></div>
+        </div>
+    </div>
+
+    <div id="resetPasswordOverlay" class="password-overlay hidden">
+        <div class="password-modal">
+            <h3>Konfirmasi Reset Data</h3>
+            <p>Masukkan password untuk mengosongkan semua data riwayat dan hasil tes.</p>
+            <input type="password" id="resetPasswordInput" placeholder="Password Reset">
+            <button id="confirmResetButton">Reset Data</button>
+            <p class="message" id="resetPasswordMessage"></p>
+        </div>
+        <div id="resetSuccessAnimation" class="checkmark-circle" style="display:none;">
+            <div class="checkmark"></div>
+        </div>
+    </div>
+
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="index.html" class="logo">Post-Test</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="soal_tes.html">Soal Tes</a></li>
+                    <li><a href="jawaban.html">Jawaban</a></li>
+                    <li><a href="history.html">Riwayat</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container content">
+        <section class="history-section">
+            <h2>Riwayat Hasil Tes Peserta</h2>
+            <div class="history-table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Nama Sekolah</th>
+                            <th>NPSN</th>
+                            <th>Nama Peserta</th>
+                            <th>Benar</th>
+                            <th>Salah</th>
+                            <th>Total Nilai</th>
+                            <th>Waktu Tes</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="reset-section">
+            <h3>Kelola Data</h3>
+            <button id="resetDataButton" class="reset-button">Reset Semua Data Tes</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Post-Test Website. All rights reserved.</p>
+    </footer>
+
+    <div id="answerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3>Detail Jawaban <span id="modal-participant-name"></span></h3>
+            <p>Sekolah: <span id="modal-school-name"></span> | NPSN: <span id="modal-npsn"></span></p>
+            <p>Benar: <span id="modal-correct-count"></span> | Salah: <span id="modal-wrong-count"></span> | Total Nilai: <span id="modal-score"></span></p>
+            <div id="modal-body" class="modal-body">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password untuk akses halaman Riwayat
+            const correctHistoryPassword = 'Kasie123.!';
+            // Password terpisah untuk fungsi Reset
+            const correctResetPassword = 'resetAdmin123!';
+
+            const passwordOverlay = document.getElementById('passwordOverlay');
+            const passwordInput = document.getElementById('passwordInput');
+            const submitPasswordBtn = document.getElementById('submitPassword');
+            const passwordMessage = document.getElementById('passwordMessage');
+            const successAnimation = document.getElementById('successAnimation');
+
+            const historyTableBody = document.getElementById('history-table-body');
+            const answerModal = document.getElementById('answerModal');
+            const closeButton = document.querySelector('.close-button');
+            const modalParticipantName = document.getElementById('modal-participant-name');
+            const modalSchoolName = document.getElementById('modal-school-name');
+            const modalNpsn = document.getElementById('modal-npsn');
+            const modalScore = document.getElementById('modal-score');
+            const modalCorrectCount = document.getElementById('modal-correct-count'); // Elemen baru
+            const modalWrongCount = document.getElementById('modal-wrong-count');   // Elemen baru
+            const modalBody = document.getElementById('modal-body');
+            const mainContent = document.querySelector('main.container.content');
+
+            // Reset Section Elements
+            const resetDataButton = document.getElementById('resetDataButton');
+            const resetPasswordOverlay = document.getElementById('resetPasswordOverlay');
+            const resetPasswordInput = document.getElementById('resetPasswordInput');
+            const confirmResetButton = document.getElementById('confirmResetButton');
+            const resetPasswordMessage = document.getElementById('resetPasswordMessage');
+            const resetSuccessAnimation = document.getElementById('resetSuccessAnimation');
+
+            // Sembunyikan konten utama sampai password benar
+            mainContent.style.display = 'none';
+            passwordOverlay.style.display = 'flex'; // Tampilkan overlay password
+
+            submitPasswordBtn.addEventListener('click', function() {
+                if (passwordInput.value === correctHistoryPassword) {
+                    passwordMessage.textContent = '';
+                    
+                    // Tampilkan animasi sukses
+                    successAnimation.style.display = 'flex';
+                    setTimeout(() => {
+                        passwordOverlay.style.display = 'none'; // Sembunyikan overlay
+                        mainContent.style.display = 'block'; // Tampilkan konten utama
+                        successAnimation.style.display = 'none'; // Sembunyikan animasi
+                        loadHistory(); // Muat riwayat setelah berhasil masuk
+                    }, 800); // Durasi animasi + sedikit jeda
+                    
+                } else {
+                    passwordMessage.textContent = 'Password salah. Coba lagi.';
+                    passwordInput.value = ''; // Kosongkan input password
+                }
+            });
+
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitPasswordBtn.click();
+                }
+            });
+
+
+            // Kunci jawaban yang sama seperti di soal_tes.html
+            const correctAnswers = {
+                q1: 'b', q2: 'c', q3: 'c', q4: 'c', q5: 'c', q6: 'c', q7: 'c', q8: 'c', q9: 'b', q10: 'c', q11: 'c'
+            };
+
+            // Teks lengkap soal yang sama seperti di soal_tes.html
+            const questionsFullText = {
+                q1: '1. Salah satu tujuan dari regulasi terbaru Permendikbudristek No. 58 Tahun 2024 adalah...',
+                q2: '2. Apa ciri utama dari format ijazah yang digunakan pada tahun pelajaran 2024/2025?',
+                q3: '3. Mengapa nomor ijazah nasional menjadi elemen penting dalam dokumen ijazah?',
+                q4: '4. Siapakah pihak yang harus bertanggung jawab terhadap keakuratan data kelulusan dan isi ijazah siswa?',
+                q5: '5. Kapan sebaiknya pengisian SPTJM dilakukan oleh sekolah?',
+                q6: '6. Apa risiko jika SPTJM tidak diisi atau tidak dilaporkan tepat waktu oleh sekolah?',
+                q7: '7. Salah satu keunggulan dari penggunaan tanda tangan elektronik dalam ijazah adalah…',
+                q8: '8. Dalam rangka penyeragaman teknis, hal apa yang harus disepakati antar sekolah di bawah dinas pendidikan?',
+                q9: '9. Apa peran utama operator sekolah dalam proses penerbitan ijazah sesuai kebijakan baru ini?',
+                q10: '10. Untuk memastikan keterlambatan tidak terjadi, apa strategi terbaik yang dapat dilakukan sekolah?',
+                q11: '11. Dalam penerbitan ijazah tahun 2024/2025, siapa yang berwenang memberikan legalisasi melalui tanda tangan digital?'
+            };
+
+            const answerOptions = {
+                'a': 'A', 'b': 'B', 'c': 'C', 'd': 'D'
+            };
+
+
+            function loadHistory() {
+                historyTableBody.innerHTML = ''; // Kosongkan tabel sebelum memuat ulang
+                let allResults = [];
+                const storedResults = localStorage.getItem('postTestResults');
+                if (storedResults) {
+                    allResults = JSON.parse(storedResults);
+                }
+
+                if (allResults.length > 0) {
+                    // Urutkan berdasarkan waktu pengerjaan terbaru
+                    allResults.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                    allResults.forEach((data, index) => {
+                        const row = historyTableBody.insertRow();
+                        row.insertCell(0).textContent = index + 1;
+                        row.insertCell(1).textContent = data.schoolName;
+                        row.insertCell(2).textContent = data.npsn;
+                        row.insertCell(3).textContent = data.participantName;
+                        row.insertCell(4).textContent = data.correctAnswersCount; // Kolom Benar
+                        row.insertCell(5).textContent = data.wrongAnswersCount;   // Kolom Salah
+                        row.insertCell(6).textContent = data.score;              // Kolom Total Nilai
+                        row.insertCell(7).textContent = data.timestamp;
+
+                        const actionCell = row.insertCell(8); // Index cell aksi bergeser
+                        const viewButton = document.createElement('button');
+                        viewButton.textContent = 'Lihat Riwayat';
+                        viewButton.classList.add('view-button');
+                        viewButton.addEventListener('click', () => showAnswerDetails(data));
+                        actionCell.appendChild(viewButton);
+                    });
+                } else {
+                    const row = historyTableBody.insertRow();
+                    const cell = row.insertCell(0);
+                    cell.colSpan = 9; // Sesuaikan colspan menjadi 9
+                    cell.textContent = "Belum ada riwayat tes.";
+                    cell.style.textAlign = "center";
+                    cell.style.padding = "20px";
+                    cell.style.color = "#888";
+                }
+            }
+
+            function showAnswerDetails(data) {
+                modalParticipantName.textContent = data.participantName;
+                modalSchoolName.textContent = data.schoolName;
+                modalNpsn.textContent = data.npsn;
+                modalScore.textContent = data.score;
+                modalCorrectCount.textContent = data.correctAnswersCount; // Tampilkan di modal
+                modalWrongCount.textContent = data.wrongAnswersCount;     // Tampilkan di modal
+                modalBody.innerHTML = ''; // Kosongkan modal body
+
+                for (const qKey in questionsFullText) {
+                    const questionText = questionsFullText[qKey];
+                    const userAnswer = data.answers[qKey];
+                    const correctAnswer = correctAnswers[qKey];
+                    
+                    const questionItem = document.createElement('div');
+                    questionItem.classList.add('question-item');
+                    questionItem.innerHTML = `<p>${questionText}</p>`;
+                    
+                    let userAnswerDisplay = 'Tidak dijawab';
+                    let userAnswerClass = '';
+
+                    if (userAnswer !== null && userAnswer !== undefined) {
+                        userAnswerDisplay = `Jawaban Anda: <span class="user-answer">${answerOptions[userAnswer] || userAnswer}</span>`;
+                        if (userAnswer === correctAnswer) {
+                            userAnswerClass = 'correct-answer-text'; // Gunakan kelas baru
+                            userAnswerDisplay += ` <span class="correct-answer-text">(Benar)</span>`;
+                        } else {
+                            userAnswerClass = 'incorrect-answer';
+                            userAnswerDisplay += ` <span class="incorrect-answer">(Salah)</span>`;
+                        }
+                    } else {
+                         userAnswerClass = ''; // Tidak ada kelas warna khusus
+                    }
+
+                    const correctAnswerFullText = `Jawaban Benar: <span class="correct-answer-text">${answerOptions[correctAnswer] || correctAnswer}</span>`;
+
+                    const answerInfo = document.createElement('p');
+                    answerInfo.innerHTML = `${userAnswerDisplay} ${correctAnswerFullText}`;
+                    answerInfo.classList.add(userAnswerClass);
+
+                    questionItem.appendChild(answerInfo);
+                    modalBody.appendChild(questionItem);
+                }
+
+                answerModal.style.display = 'block'; // Tampilkan modal
+            }
+
+            // Tutup modal ketika tombol 'x' diklik
+            closeButton.addEventListener('click', () => {
+                answerModal.style.display = 'none';
+            });
+
+            // Tutup modal ketika klik di luar area modal
+            window.addEventListener('click', (event) => {
+                if (event.target == answerModal) {
+                    answerModal.style.display = 'none';
+                }
+            });
+
+            // --- Reset Data Functionality ---
+            resetDataButton.addEventListener('click', function() {
+                resetPasswordOverlay.style.display = 'flex'; // Tampilkan overlay reset password
+                resetPasswordInput.value = ''; // Bersihkan input
+                resetPasswordMessage.textContent = ''; // Bersihkan pesan
+            });
+
+            confirmResetButton.addEventListener('click', function() {
+                if (resetPasswordInput.value === correctResetPassword) {
+                    resetPasswordMessage.textContent = '';
+                    
+                    // Tampilkan animasi sukses untuk reset
+                    resetSuccessAnimation.style.display = 'flex';
+                    setTimeout(() => {
+                        localStorage.removeItem('postTestResults'); // Hapus semua data
+                        resetPasswordOverlay.style.display = 'none'; // Sembunyikan overlay
+                        resetSuccessAnimation.style.display = 'none'; // Sembunyikan animasi
+                        loadHistory(); // Muat ulang tabel riwayat (akan kosong)
+                        alert('Semua data tes berhasil direset!');
+                    }, 800);
+                } else {
+                    resetPasswordMessage.textContent = 'Password reset salah. Coba lagi.';
+                    resetPasswordInput.value = '';
+                }
+            });
+
+            resetPasswordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    confirmResetButton.click();
+                }
+            });
+
+            // Menutup overlay reset jika diklik di luar area modalnya (opsional)
+            resetPasswordOverlay.addEventListener('click', function(event) {
+                if (event.target === resetPasswordOverlay) {
+                    resetPasswordOverlay.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
