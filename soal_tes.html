@@ -273,9 +273,133 @@
             from { transform: scale(0.8); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
+
+        /* Timer Styles */
+        .timer-container {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+        }
+
+        .timer {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #28a745; /* Green by default */
+        }
+
+        .timer.warning {
+            color: #ffc107; /* Yellow when 5 minutes left */
+        }
+
+        .timer.danger {
+            color: #dc3545; /* Red when time is almost up */
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Welcome Popup Styles */
+        .welcome-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome-popup-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            animation: fadeInScale 0.3s forwards;
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .welcome-popup h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+
+        .welcome-popup p {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .welcome-popup .btn-start {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 15px;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .welcome-popup .btn-start:hover {
+            background-color: #2980b9;
+        }
+
+        .welcome-popup .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            color: #888;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .welcome-popup .close-btn:hover {
+            color: #333;
+        }
     </style>
 </head>
 <body>
+    <!-- Welcome Popup -->
+    <div id="welcomePopup" class="welcome-popup">
+        <div class="welcome-popup-content">
+            <span class="close-btn">&times;</span>
+            <h2>Waktu Pengerjaan Tes</h2>
+            <p>Anda memiliki waktu 10 menit untuk menyelesaikan soal tes ini. Waktu akan mulai berjalan setelah Anda klik tombol "Mulai Tes".</p>
+            <button id="startTestBtn" class="btn-start">Mulai Tes</button>
+        </div>
+    </div>
+
+    <!-- Timer Display -->
+    <div class="timer-container">
+        <div id="timer" class="timer">10:00</div>
+    </div>
+
     <div id="warningOverlay" class="warning-overlay" style="display: none;">
         <div class="warning-modal">
             <div class="warning-icon">⚠️</div>
@@ -299,7 +423,7 @@
     <div id="thankYouOverlay" class="thankyou-overlay">
         <div class="thankyou-modal">
             <h3>Terima Kasih!</h3>
-            <p>Hormat Kami,<br>Kasie Kurikulum DIKBUD KKT</p>
+            <p>Hormat Kami,<br>Kasei Kurikulum DIKBUD KKT</p>
         </div>
     </div>
 
@@ -432,7 +556,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 Post-Test Website. All rights reserved.DIKBUD KKT</p>
+        <p>&copy; 2025 Post-Test Website. All rights reserved.</p>
     </footer>
 
     <script>
@@ -447,6 +571,83 @@
             const confirmOkBtn = document.getElementById('confirmOkBtn');
             const confirmCancelBtn = document.getElementById('confirmCancelBtn');
             const thankYouOverlay = document.getElementById('thankYouOverlay');
+
+            // Timer elements
+            const timerContainer = document.querySelector('.timer-container');
+            const timerDisplay = document.getElementById('timer');
+            const welcomePopup = document.getElementById('welcomePopup');
+            const closePopupBtn = document.querySelector('.welcome-popup .close-btn');
+            const startTestBtn = document.getElementById('startTestBtn');
+
+            // Initially hide timer
+            timerContainer.style.display = 'none';
+
+            // Show welcome popup
+            welcomePopup.style.display = 'flex';
+
+            // Close popup when X is clicked
+            closePopupBtn.addEventListener('click', function() {
+                welcomePopup.style.display = 'none';
+            });
+
+            // Close popup when clicking outside
+            welcomePopup.addEventListener('click', function(e) {
+                if (e.target === welcomePopup) {
+                    welcomePopup.style.display = 'none';
+                }
+            });
+
+            // Timer functionality
+            let timeLeft = 600; // 10 minutes in seconds
+            let timerInterval;
+            let testStarted = false;
+
+            startTestBtn.addEventListener('click', function() {
+                welcomePopup.style.display = 'none';
+                timerContainer.style.display = 'block';
+                testStarted = true;
+                startTimer();
+            });
+
+            function startTimer() {
+                timerInterval = setInterval(function() {
+                    timeLeft--;
+                    updateTimerDisplay();
+
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        timeUp();
+                    } else if (timeLeft <= 300) { // 5 minutes left
+                        timerDisplay.classList.add('danger');
+                        timerDisplay.classList.remove('warning');
+                        // Show warning message when 5 minutes left
+                        if (timeLeft === 300) {
+                            feedbackDiv.style.display = 'block';
+                            feedbackDiv.textContent = 'Peringatan! Waktu tersisa 5 menit!';
+                            feedbackDiv.style.backgroundColor = '#ffc107';
+                            feedbackDiv.style.color = '#000';
+                        }
+                    } else if (timeLeft <= 420) { // 3 minutes left
+                        timerDisplay.classList.add('warning');
+                    }
+                }, 1000);
+            }
+
+            function updateTimerDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }
+
+            function timeUp() {
+                // Auto-submit the form when time is up
+                feedbackDiv.style.display = 'block';
+                feedbackDiv.textContent = 'Waktu telah habis! Jawaban Anda akan disimpan.';
+                feedbackDiv.style.backgroundColor = '#dc3545';
+                
+                // Submit the form with whatever answers are filled
+                submitTest();
+            }
 
             const correctAnswers = {
                 q1: 'b',
@@ -469,6 +670,13 @@
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault(); // Mencegah form untuk refresh halaman
+
+                if (!testStarted) {
+                    feedbackDiv.style.display = 'block';
+                    feedbackDiv.textContent = 'Silahkan klik "Mulai Tes" terlebih dahulu untuk memulai timer.';
+                    feedbackDiv.style.backgroundColor = '#e74c3c';
+                    return;
+                }
 
                 const schoolName = document.getElementById('schoolName').value.trim();
                 const npsn = document.getElementById('npsn').value.trim();
@@ -528,6 +736,11 @@
             // Event listener untuk tombol "OK" pada modal konfirmasi
             confirmOkBtn.addEventListener('click', function() {
                 confirmationOverlay.style.display = 'none'; // Sembunyikan modal konfirmasi
+                submitTest();
+            });
+
+            function submitTest() {
+                clearInterval(timerInterval); // Stop the timer
 
                 const schoolName = document.getElementById('schoolName').value.trim();
                 const npsn = document.getElementById('npsn').value.trim();
@@ -550,8 +763,7 @@
                             wrongCount++;
                         }
                     } else {
-                        // Ini seharusnya tidak terjadi jika validasi answeredAll sudah berjalan dengan baik,
-                        // tapi sebagai fallback
+                        // Jika tidak dijawab (hanya terjadi jika time up)
                         participantAnswers[qKey] = null;
                         wrongCount++;
                     }
@@ -572,7 +784,8 @@
                     correctAnswersCount: correctCount,
                     wrongAnswersCount: wrongCount,
                     answers: participantAnswers,
-                    timestamp: new Date().toLocaleString()
+                    timestamp: new Date().toLocaleString(),
+                    timeLeft: timeLeft // Simpan sisa waktu jika diperlukan
                 });
 
                 localStorage.setItem('postTestResults', JSON.stringify(results));
@@ -584,7 +797,7 @@
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 3000); // Tunggu 3 detik sebelum redirect
-            });
+            }
 
             // Event listener untuk tombol "Batal" pada modal konfirmasi
             confirmCancelBtn.addEventListener('click', function() {
