@@ -48,6 +48,12 @@
             display: block;
             margin-bottom: 8px;
             cursor: pointer;
+            padding: 8px; /* Tambahkan padding agar area klik lebih luas */
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+        .question label:hover {
+            background-color: #f0f0f0;
         }
         .question input[type="radio"] {
             margin-right: 8px;
@@ -77,7 +83,7 @@
             display: none; /* Hidden by default */
         }
 
-        /* Gaya untuk animasi peringatan */
+        /* Gaya untuk modal peringatan NPSN */
         .warning-overlay {
             display: flex;
             justify-content: center;
@@ -142,6 +148,113 @@
             animation: bounceIn 0.6s ease-out;
         }
 
+        /* Gaya untuk modal konfirmasi */
+        .confirmation-overlay {
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        .confirmation-modal {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transform: scale(0.9);
+            animation: scaleIn 0.3s forwards;
+        }
+
+        .confirmation-modal h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .confirmation-modal p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .confirmation-buttons button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .confirmation-buttons .btn-ok {
+            background-color: #28a745; /* Green */
+            color: white;
+        }
+
+        .confirmation-buttons .btn-ok:hover {
+            background-color: #218838;
+        }
+
+        .confirmation-buttons .btn-cancel {
+            background-color: #dc3545; /* Red */
+            color: white;
+        }
+
+        .confirmation-buttons .btn-cancel:hover {
+            background-color: #c82333;
+        }
+
+        /* Gaya untuk modal terima kasih */
+        .thankyou-overlay {
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        .thankyou-modal {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.9);
+            animation: scaleIn 0.3s forwards;
+        }
+
+        .thankyou-modal h3 {
+            color: #28a745;
+            margin-top: 0;
+            font-size: 2em;
+        }
+
+        .thankyou-modal p {
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        /* Animasi */
         @keyframes fadeIn {
             to { opacity: 1; }
         }
@@ -155,6 +268,11 @@
             50% { transform: scale(1.2); opacity: 1; }
             100% { transform: scale(1); }
         }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -164,6 +282,24 @@
             <h3>NPSN Sudah Terdaftar!</h3>
             <p>NPSN ini telah melakukan Post-Test sebelumnya. Mohon masukkan NPSN yang berbeda.</p>
             <button id="closeWarningModal">Oke, Mengerti</button>
+        </div>
+    </div>
+
+    <div id="confirmationOverlay" class="confirmation-overlay">
+        <div class="confirmation-modal">
+            <h3>Konfirmasi Penyelesaian Tes</h3>
+            <p>Jika Anda sudah yakin dengan semua jawaban Anda, klik "OK". Jika masih ragu, klik "Batal".</p>
+            <div class="confirmation-buttons">
+                <button id="confirmOkBtn" class="btn-ok">OK</button>
+                <button id="confirmCancelBtn" class="btn-cancel">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="thankYouOverlay" class="thankyou-overlay">
+        <div class="thankyou-modal">
+            <h3>Terima Kasih!</h3>
+            <p>Hormat Kami,<br>Kasei Kurikulum DIKBUD KKT</p>
         </div>
     </div>
 
@@ -182,114 +318,116 @@
     </header>
 
     <main class="container content">
-        <section class="test-form">
+        <section class="test-form-section">
             <h2>Soal Post-Test Sosialisasi Permendikbudristek No. 58 Tahun 2024</h2>
-            <form id="postTestForm">
-                <div class="form-group">
-                    <label for="schoolName">Nama Sekolah:</label>
-                    <input type="text" id="schoolName" name="schoolName" required>
-                </div>
-                <div class="form-group">
-                    <label for="npsn">NPSN:</label>
-                    <input type="text" id="npsn" name="npsn" required pattern="[0-9]{8,10}" title="NPSN harus berupa angka 8-10 digit">
-                    <small>Masukkan NPSN sekolah Anda (8-10 digit angka).</small>
-                </div>
-                <div class="form-group">
-                    <label for="participantName">Nama Peserta:</label>
-                    <input type="text" id="participantName" name="participantName" required>
-                </div>
+            <div class="test-form">
+                <form id="postTestForm">
+                    <div class="form-group">
+                        <label for="schoolName">Nama Sekolah:</label>
+                        <input type="text" id="schoolName" name="schoolName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="npsn">NPSN:</label>
+                        <input type="text" id="npsn" name="npsn" required pattern="[0-9]{8,10}" title="NPSN harus berupa angka 8-10 digit">
+                        <small>Masukkan NPSN sekolah Anda (8-10 digit angka).</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="participantName">Nama Peserta:</label>
+                        <input type="text" id="participantName" name="participantName" required>
+                    </div>
 
-                <div class="question">
-                    <p data-question-id="q1">1. Salah satu tujuan dari regulasi terbaru Permendikbudristek No. 58 Tahun 2024 adalah...</p>
-                    <label><input type="radio" name="q1" value="a"> A. Meningkatkan pelaporan BOS</label>
-                    <label><input type="radio" name="q1" value="b"> B. Memperkuat sistem legalitas ijazah secara nasional</label>
-                    <label><input type="radio" name="q1" value="c"> C. Mengganti sistem zonasi secara total</label>
-                    <label><input type="radio" name="q1" value="d"> D. Menstandarkan penilaian harian siswa</label>
-                </div>
+                    <div class="question">
+                        <p data-question-id="q1">1. Salah satu tujuan dari regulasi terbaru Permendikbudristek No. 58 Tahun 2024 adalah...</p>
+                        <label><input type="radio" name="q1" value="a"> A. Meningkatkan pelaporan BOS</label>
+                        <label><input type="radio" name="q1" value="b"> B. Memperkuat sistem legalitas ijazah secara nasional</label>
+                        <label><input type="radio" name="q1" value="c"> C. Mengganti sistem zonasi secara total</label>
+                        <label><input type="radio" name="q1" value="d"> D. Menstandarkan penilaian harian siswa</label>
+                    </div>
 
-                <div class="question">
-                    <p data-question-id="q2">2. Apa ciri utama dari format ijazah yang digunakan pada tahun pelajaran 2024/2025?</p>
-                    <label><input type="radio" name="q2" value="a"> A. Menggunakan stempel dinas kabupaten</label>
-                    <label><input type="radio" name="q2" value="b"> B. Dicetak dengan tinta khusus dari pusat</label>
-                    <label><input type="radio" name="q2" value="c"> C. Ditandatangani secara elektronik oleh kepala sekolah</label>
-                    <label><input type="radio" name="q2" value="d"> D. Dikirim dari kementerian langsung</label>
-                </div>
+                    <div class="question">
+                        <p data-question-id="q2">2. Apa ciri utama dari format ijazah yang digunakan pada tahun pelajaran 2024/2025?</p>
+                        <label><input type="radio" name="q2" value="a"> A. Menggunakan stempel dinas kabupaten</label>
+                        <label><input type="radio" name="q2" value="b"> B. Dicetak dengan tinta khusus dari pusat</label>
+                        <label><input type="radio" name="q2" value="c"> C. Ditandatangani secara elektronik oleh kepala sekolah</label>
+                        <label><input type="radio" name="q2" value="d"> D. Dikirim dari kementerian langsung</label>
+                    </div>
 
-                <div class="question">
-                    <p data-question-id="q3">3. Mengapa nomor ijazah nasional menjadi elemen penting dalam dokumen ijazah?</p>
-                    <label><input type="radio" name="q3" value="a"> A. Agar siswa dapat melamar kerja</label>
-                    <label><input type="radio" name="q3" value="b"> B. Sebagai bukti bahwa siswa lulus UN</label>
-                    <label><input type="radio" name="q3" value="c"> C. Untuk menghindari pemalsuan dan mendukung verifikasi digital</label>
-                    <label><input type="radio" name="q3" value="d"> D. Agar siswa mendapatkan bantuan sosial</label>
-                </div>
+                    <div class="question">
+                        <p data-question-id="q3">3. Mengapa nomor ijazah nasional menjadi elemen penting dalam dokumen ijazah?</p>
+                        <label><input type="radio" name="q3" value="a"> A. Agar siswa dapat melamar kerja</label>
+                        <label><input type="radio" name="q3" value="b"> B. Sebagai bukti bahwa siswa lulus UN</label>
+                        <label><input type="radio" name="q3" value="c"> C. Untuk menghindari pemalsuan dan mendukung verifikasi digital</label>
+                        <label><input type="radio" name="q3" value="d"> D. Agar siswa mendapatkan bantuan sosial</label>
+                    </div>
 
-                <div class="question">
-                    <p data-question-id="q4">4. Siapakah pihak yang harus bertanggung jawab terhadap keakuratan data kelulusan dan isi ijazah siswa?</p>
-                    <label><input type="radio" name="q4" value="a"> A. Operator dinas</label>
-                    <label><input type="radio" name="q4" value="b"> B. Guru kelas</label>
-                    <label><input type="radio" name="q4" value="c"> C. Kepala sekolah</label>
-                    <label><input type="radio" name="q4" value="d"> D. Orang tua siswa</label>
-                </div>
+                    <div class="question">
+                        <p data-question-id="q4">4. Siapakah pihak yang harus bertanggung jawab terhadap keakuratan data kelulusan dan isi ijazah siswa?</p>
+                        <label><input type="radio" name="q4" value="a"> A. Operator dinas</label>
+                        <label><input type="radio" name="q4" value="b"> B. Guru kelas</label>
+                        <label><input type="radio" name="q4" value="c"> C. Kepala sekolah</label>
+                        <label><input type="radio" name="q4" value="d"> D. Orang tua siswa</label>
+                    </div>
 
-                <div class="question">
-                    <p data-question-id="q5">5. Kapan sebaiknya pengisian SPTJM dilakukan oleh sekolah?</p>
-                    <label><input type="radio" name="q5" value="a"> A. Setelah semua siswa terdaftar di SMA</label>
-                    <label><input type="radio" name="q5" value="b"> B. Setelah penyerahan ijazah ke siswa</label>
-                    <label><input type="radio" name="q5" value="c"> C. Setelah rapor diserahkan dan kelulusan diumumkan</label>
-                    <label><input type="radio" name="q5" value="d"> D. Sebelum pelaksanaan ujian sekolah</label>
-                </div>
+                    <div class="question">
+                        <p data-question-id="q5">5. Kapan sebaiknya pengisian SPTJM dilakukan oleh sekolah?</p>
+                        <label><input type="radio" name="q5" value="a"> A. Setelah semua siswa terdaftar di SMA</label>
+                        <label><input type="radio" name="q5" value="b"> B. Setelah penyerahan ijazah ke siswa</label>
+                        <label><input type="radio" name="q5" value="c"> C. Setelah rapor diserahkan dan kelulusan diumumkan</label>
+                        <label><input type="radio" name="q5" value="d"> D. Sebelum pelaksanaan ujian sekolah</label>
+                    </div>
 
-                <div class="question">
-                    <p data-question-id="q6">6. Apa risiko jika SPTJM tidak diisi atau tidak dilaporkan tepat waktu oleh sekolah?</p>
-                    <label><input type="radio" name="q6" value="a"> A. Dinas pendidikan akan menghapus data siswa</label>
-                    <label><input type="radio" name="q6" value="b"> B. Sekolah tidak mendapat dana BOS</label>
-                    <label><input type="radio" name="q6" value="c"> C. Ijazah tidak dapat diterbitkan secara resmi</label>
-                    <label><input type="radio" name="q6" value="d"> D. Kepala sekolah harus membuat ulang rapor</label>
-                </div>
+                    <div class="question">
+                        <p data-question-id="q6">6. Apa risiko jika SPTJM tidak diisi atau tidak dilaporkan tepat waktu oleh sekolah?</p>
+                        <label><input type="radio" name="q6" value="a"> A. Dinas pendidikan akan menghapus data siswa</label>
+                        <label><input type="radio" name="q6" value="b"> B. Sekolah tidak mendapat dana BOS</label>
+                        <label><input type="radio" name="q6" value="c"> C. Ijazah tidak dapat diterbitkan secara resmi</label>
+                        <label><input type="radio" name="q6" value="d"> D. Kepala sekolah harus membuat ulang rapor</label>
+                    </div>
 
-                <div class="question">
-                    <p data-question-id="q7">7. Salah satu keunggulan dari penggunaan tanda tangan elektronik dalam ijazah adalah…</p>
-                    <label><input type="radio" name="q7" value="a"> A. Bisa digunakan untuk mempercepat proses mutasi</label>
-                    <label><input type="radio" name="q7" value="b"> B. Menjadikan ijazah lebih ringan dicetak</label>
-                    <label><input type="radio" name="q7" value="c"> C. Memberikan kemudahan validasi dan keamanan data</label>
-                    <label><input type="radio" name="q7" value="d"> D. Tidak perlu izin dari kementerian</label>
-                </div>
+                    <div class="question">
+                        <p data-question-id="q7">7. Salah satu keunggulan dari penggunaan tanda tangan elektronik dalam ijazah adalah…</p>
+                        <label><input type="radio" name="q7" value="a"> A. Bisa digunakan untuk mempercepat proses mutasi</label>
+                        <label><input type="radio" name="q7" value="b"> B. Menjadikan ijazah lebih ringan dicetak</label>
+                        <label><input type="radio" name="q7" value="c"> C. Memberikan kemudahan validasi dan keamanan data</label>
+                        <label><input type="radio" name="q7" value="d"> D. Tidak perlu izin dari kementerian</label>
+                    </div>
 
-                <div class="question">
-                    <p data-question-id="q8">8. Dalam rangka penyeragaman teknis, hal apa yang harus disepakati antar sekolah di bawah dinas pendidikan?</p>
-                    <label><input type="radio" name="q8" value="a"> A. Jadwal pengambilan rapor siswa</label>
-                    <label><input type="radio" name="q8" value="b"> B. Jadwal libur akhir tahun</label>
-                    <label><input type="radio" name="q8" value="c"> C. Jadwal penerbitan dan distribusi ijazah</label>
-                    <label><input type="radio" name="q8" value="d"> D. Format soal ujian sekolah</label>
-                </div>
+                    <div class="question">
+                        <p data-question-id="q8">8. Dalam rangka penyeragaman teknis, hal apa yang harus disepakati antar sekolah di bawah dinas pendidikan?</p>
+                        <label><input type="radio" name="q8" value="a"> A. Jadwal pengambilan rapor siswa</label>
+                        <label><input type="radio" name="q8" value="b"> B. Jadwal libur akhir tahun</label>
+                        <label><input type="radio" name="q8" value="c"> C. Jadwal penerbitan dan distribusi ijazah</label>
+                        <label><input type="radio" name="q8" value="d"> D. Format soal ujian sekolah</label>
+                    </div>
 
-                <div class="question">
-                    <p data-question-id="q9">9. Apa peran utama operator sekolah dalam proses penerbitan ijazah sesuai kebijakan baru ini?</p>
-                    <label><input type="radio" name="q9" value="a"> A. Menandatangani ijazah digital</label>
-                    <label><input type="radio" name="q9" value="b"> B. Menginput dan memverifikasi data peserta didik</label>
-                    <label><input type="radio" name="q9" value="c"> C. Mendistribusikan blangko dari dinas</label>
-                    <label><input type="radio" name="q9" value="d"> D. Menentukan kelulusan siswa</label>
-                </div>
+                    <div class="question">
+                        <p data-question-id="q9">9. Apa peran utama operator sekolah dalam proses penerbitan ijazah sesuai kebijakan baru ini?</p>
+                        <label><input type="radio" name="q9" value="a"> A. Menandatangani ijazah digital</label>
+                        <label><input type="radio" name="q9" value="b"> B. Menginput dan memverifikasi data peserta didik</label>
+                        <label><input type="radio" name="q9" value="c"> C. Mendistribusikan blangko dari dinas</label>
+                        <label><input type="radio" name="q9" value="d"> D. Menentukan kelulusan siswa</label>
+                    </div>
 
-                <div class="question">
-                    <p data-question-id="q10">10. Untuk memastikan keterlambatan tidak terjadi, apa strategi terbaik yang dapat dilakukan sekolah?</p>
-                    <label><input type="radio" name="q10" value="a"> A. Menunggu petunjuk pusat</label>
-                    <label><input type="radio" name="q10" value="b"> B. Mengalihkan tugas operator ke guru</label>
-                    <label><input type="radio" name="q10" value="c"> C. Membuat timeline kerja dan membentuk tim kelulusan</label>
-                    <label><input type="radio" name="q10" value="d"> D. Menyewa jasa percetakan luar</label>
-                </div>
+                    <div class="question">
+                        <p data-question-id="q10">10. Untuk memastikan keterlambatan tidak terjadi, apa strategi terbaik yang dapat dilakukan sekolah?</p>
+                        <label><input type="radio" name="q10" value="a"> A. Menunggu petunjuk pusat</label>
+                        <label><input type="radio" name="q10" value="b"> B. Mengalihkan tugas operator ke guru</label>
+                        <label><input type="radio" name="q10" value="c"> C. Membuat timeline kerja dan membentuk tim kelulusan</label>
+                        <label><input type="radio" name="q10" value="d"> D. Menyewa jasa percetakan luar</label>
+                    </div>
 
-                <div class="question">
-                    <p data-question-id="q11">11. Dalam penerbitan ijazah tahun 2024/2025, siapa yang berwenang memberikan legalisasi melalui tanda tangan digital?</p>
-                    <label><input type="radio" name="q11" value="a"> A. Kepala dinas kabupaten</label>
-                    <label><input type="radio" name="q11" value="b"> B. Guru kelas</label>
-                    <label><input type="radio" name="q11" value="c"> C. Kepala sekolah</label>
-                    <label><input type="radio" name="q11" value="d"> D. Operator dinas</label>
-                </div>
+                    <div class="question">
+                        <p data-question-id="q11">11. Dalam penerbitan ijazah tahun 2024/2025, siapa yang berwenang memberikan legalisasi melalui tanda tangan digital?</p>
+                        <label><input type="radio" name="q11" value="a"> A. Kepala dinas kabupaten</label>
+                        <label><input type="radio" name="q11" value="b"> B. Guru kelas</label>
+                        <label><input type="radio" name="q11" value="c"> C. Kepala sekolah</label>
+                        <label><input type="radio" name="q11" value="d"> D. Operator dinas</label>
+                    </div>
 
-                <button type="submit" class="submit-btn">Selesai Tes</button>
-                <div id="feedback"></div>
-            </form>
+                    <button type="submit" class="submit-btn">Selesai Tes</button>
+                    <div id="feedback"></div>
+                </form>
+            </div>
         </section>
     </main>
 
@@ -304,6 +442,12 @@
             const warningOverlay = document.getElementById('warningOverlay');
             const closeWarningModalBtn = document.getElementById('closeWarningModal');
 
+            // Tambahkan elemen modal konfirmasi dan terima kasih
+            const confirmationOverlay = document.getElementById('confirmationOverlay');
+            const confirmOkBtn = document.getElementById('confirmOkBtn');
+            const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+            const thankYouOverlay = document.getElementById('thankYouOverlay');
+
             const correctAnswers = {
                 q1: 'b',
                 q2: 'c',
@@ -317,7 +461,7 @@
                 q10: 'c',
                 q11: 'c'
             };
-            const totalQuestions = Object.keys(correctAnswers).length; // Total 11 soal
+            const totalQuestions = Object.keys(correctAnswers).length;
 
             closeWarningModalBtn.addEventListener('click', function() {
                 warningOverlay.style.display = 'none';
@@ -353,37 +497,19 @@
                     results = JSON.parse(storedResults);
                     const isNpsnAlreadyTested = results.some(res => res.npsn === npsn);
                     if (isNpsnAlreadyTested) {
-                        warningOverlay.style.display = 'flex'; // Tampilkan peringatan
+                        warningOverlay.style.display = 'flex'; // Tampilkan peringatan NPSN
                         feedbackDiv.style.display = 'none'; // Sembunyikan feedback biasa jika ada
                         return; // Hentikan proses submit
                     }
                 }
 
-                let score = 0;
-                let correctCount = 0;
-                let wrongCount = 0;
+                // Periksa apakah semua soal sudah dijawab sebelum menampilkan konfirmasi
                 let answeredAll = true;
-                let participantAnswers = {}; // Untuk menyimpan jawaban peserta
-
                 for (const qKey in correctAnswers) {
                     const selectedOption = document.querySelector(`input[name="${qKey}"]:checked`);
-                    
-                    if (selectedOption) {
-                        participantAnswers[qKey] = selectedOption.value; // Simpan pilihan jawaban
-                        
-                        if (selectedOption.value === correctAnswers[qKey]) {
-                            score += 5; // Poin untuk jawaban benar
-                            correctCount++;
-                        } else {
-                            // score tidak berubah (0 poin untuk salah)
-                            wrongCount++;
-                        }
-                    } else {
+                    if (!selectedOption) {
                         answeredAll = false;
-                        participantAnswers[qKey] = null; // Tandai sebagai tidak dijawab
-                        // Jika tidak dijawab, anggap salah untuk perhitungan total (meskipun tidak mengurangi poin)
-                        // atau bisa juga diabaikan dari wrongCount jika maunya hanya "salah" yang dijawab
-                        // Untuk saat ini, kita akan menghitungnya sebagai "tidak dijawab" tapi tidak menambah wrongCount
+                        break;
                     }
                 }
 
@@ -394,30 +520,76 @@
                     return;
                 }
 
-                // Tambahkan hasil tes baru beserta jawaban peserta, correctCount, dan wrongCount
+                // Jika semua validasi lolos, tampilkan modal konfirmasi
+                confirmationOverlay.style.display = 'flex';
+                feedbackDiv.style.display = 'none'; // Sembunyikan feedback sebelumnya
+            });
+
+            // Event listener untuk tombol "OK" pada modal konfirmasi
+            confirmOkBtn.addEventListener('click', function() {
+                confirmationOverlay.style.display = 'none'; // Sembunyikan modal konfirmasi
+
+                const schoolName = document.getElementById('schoolName').value.trim();
+                const npsn = document.getElementById('npsn').value.trim();
+                const participantName = document.getElementById('participantName').value.trim();
+
+                let score = 0;
+                let correctCount = 0;
+                let wrongCount = 0;
+                let participantAnswers = {};
+
+                for (const qKey in correctAnswers) {
+                    const selectedOption = document.querySelector(`input[name="${qKey}"]:checked`);
+                    
+                    if (selectedOption) {
+                        participantAnswers[qKey] = selectedOption.value;
+                        if (selectedOption.value === correctAnswers[qKey]) {
+                            score += 5; // Poin untuk jawaban benar
+                            correctCount++;
+                        } else {
+                            wrongCount++;
+                        }
+                    } else {
+                        // Ini seharusnya tidak terjadi jika validasi answeredAll sudah berjalan dengan baik,
+                        // tapi sebagai fallback
+                        participantAnswers[qKey] = null;
+                        wrongCount++;
+                    }
+                }
+
+                let results = [];
+                const storedResults = localStorage.getItem('postTestResults');
+                if (storedResults) {
+                    results = JSON.parse(storedResults);
+                }
+
                 results.push({
-                    id: Date.now(), // ID unik untuk setiap entri riwayat
+                    id: Date.now(),
                     schoolName: schoolName,
                     npsn: npsn,
                     participantName: participantName,
                     score: score,
-                    correctAnswersCount: correctCount, // Simpan jumlah jawaban benar
-                    wrongAnswersCount: wrongCount, // Simpan jumlah jawaban salah
+                    correctAnswersCount: correctCount,
+                    wrongAnswersCount: wrongCount,
                     answers: participantAnswers,
                     timestamp: new Date().toLocaleString()
                 });
 
-                // Simpan kembali data hasil ke LocalStorage
                 localStorage.setItem('postTestResults', JSON.stringify(results));
 
-                feedbackDiv.style.display = 'block';
-                feedbackDiv.textContent = `Tes selesai! Nilai Anda: ${score} (Benar: ${correctCount}, Salah: ${wrongCount}). Anda akan diarahkan ke Beranda.`;
-                feedbackDiv.style.backgroundColor = '#27ae60'; // Hijau
+                // Tampilkan modal terima kasih
+                thankYouOverlay.style.display = 'flex';
 
-                // Arahkan kembali ke halaman beranda setelah beberapa saat
+                // Arahkan kembali ke halaman beranda setelah beberapa saat setelah modal terima kasih
                 setTimeout(() => {
                     window.location.href = 'index.html';
-                }, 2000); // Tunggu 2 detik sebelum redirect
+                }, 3000); // Tunggu 3 detik sebelum redirect
+            });
+
+            // Event listener untuk tombol "Batal" pada modal konfirmasi
+            confirmCancelBtn.addEventListener('click', function() {
+                confirmationOverlay.style.display = 'none'; // Sembunyikan modal konfirmasi
+                // Peserta bisa kembali mengoreksi jawabannya
             });
         });
     </script>
